@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Justin Searls"]
   spec.email         = ["searls@gmail.com"]
 
-  spec.summary       = "Write time-sensitive to-do items in your code and once they expire, they blow up!"
+  spec.summary       = "Write TO​DOs in code that ensure you actually do them"
   spec.homepage      = "https://github.com/testdouble/todo_or_die"
 
   spec.files         = Dir.chdir(File.expand_path("..", __FILE__)) do
