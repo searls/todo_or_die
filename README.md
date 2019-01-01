@@ -1,5 +1,7 @@
 # TODO or Die!
 
+<img src="https://user-images.githubusercontent.com/79303/50570550-f41a6180-0d5d-11e9-8033-7ea4dfb7261c.jpg" height="360"  alt="TODO or Die NES cart"/>
+
 ## Usage
 
 Stick this in your Gemfile and bundle it:
@@ -124,7 +126,7 @@ by software teams around the world. Some common examples:
 * You're a real funny person and you think it'd be hilarious to make a bunch of
   Jim's tests start failing on Christmas morning
 
-# Pro-tip
+## Pro-tip
 
 Cute Rails date helpers are awesome, but don't think you're going to be able to
 do this and actually accomplish anything:
