@@ -1,6 +1,6 @@
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "todo_or_die/version"
+require "todo_or_die"
 
 Gem::Specification.new do |spec|
   spec.name          = "todo_or_die"
