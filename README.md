@@ -2,6 +2,8 @@
 
 <img src="https://user-images.githubusercontent.com/79303/50570550-f41a6180-0d5d-11e9-8033-7ea4dfb7261c.jpg" height="360"  alt="TODO or Die NES cart"/>
 
+[![CircleCI](https://circleci.com/gh/searls/todo_or_die/tree/master.svg?style=svg)](https://circleci.com/gh/searls/todo_or_die/tree/master)
+
 ## Usage
 
 Stick this in your Gemfile and bundle it:
@@ -42,7 +44,7 @@ actual support incident (long story).
 
 So I did what any programmer would do in the face of an intractable social
 problem: I wrote code in the vain hope of solving things without needing to talk
-to anyone, and now this gem exists.
+to anyone. And now this gem exists.
 
 To use it, try replacing one of your TODO comments with something like this:
 
@@ -60,7 +62,7 @@ raise an error whenever this class is loaded until someone deals with it.
 
 ### What kind of error?
 
-It depends on whether `Rails` is defined.
+It depends on whether you're using [Rails](https://rubyonrails.org) or not.
 
 #### When you're writing Real Ruby
 
@@ -69,7 +71,7 @@ raise a `TodoOrDie::OverdueError` whenever a TODO is overdue. The message looks
 like this:
 
 ```
-TODO: "Visit Wisconsin" came due on 2016-11-9. Do it!
+TODO: "Visit Wisconsin" came due on 2016-11-09. Do it!
 ```
 
 #### When `Rails` is a thing
@@ -107,7 +109,7 @@ ignored. (You can restore the default hook with `TodoOrDie.reset`).
 
 ## When is this useful?
 
-This gem may come in handy whenever you know the code _will_ needs to change,
+This gem may come in handy whenever you know the code _will_ need to change,
 but it can't be changed just yet, and you lack some other reliable means of
 ensuring yourself (or your team) will actually follow through on making the
 change later.
@@ -117,12 +119,12 @@ Law](https://www.quora.com/What-resources-could-I-read-about-Leblancs-law),
 which states that `Later == Never`. Countless proofs of this theorem have been
 reproduced by software teams around the world. Some common examples:
 
-* A feature flag was added to the app, and the old code path is still present,
-  long after all production traffic has been migrated. There's now just a
-  useless `TODO: delete` comment to keep it company
+* A feature flag was added to the app a long time ago, but the old code path is
+  still present, even after the flag had been enabled for everyone. Except now
+  there's also a useless `TODO: delete` comment to keep it company
 * A failing test was blocking the build and someone felt an urgent pressure to
-  deploy the app in spite of this. So, rather than fix the test, Bill commented
-  it out "for now"
+  deploy the app anyway. So, rather than fix the test, Bill commented it out
+  "for now"
 * You're a real funny guy and you think it'd be hilarious to make a bunch of
   Aaron's tests start failing on Christmas morning
 
@@ -135,4 +137,4 @@ do this and actually accomplish anything:
 TodoOrDie("Update after APIv2 goes live", 2.weeks.from_now)
 ```
 
-
+It will never be two weeks from now.
