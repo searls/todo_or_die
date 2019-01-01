@@ -20,11 +20,9 @@ To understand why you would ever call a method to write a comment, read on.
 
 ### The awful way you used to procrastinate
 
-In the Bad Old Days™, if you had a bit of code you knew needed to change later,
-you might leave yourself a code comment to remind yourself or some future
-traveler to implement it.
-
-Here's the real world example code comment that inspired this gem:
+In the Bad Old Days™, if you had a bit of code you knew you needed to change
+later, you might leave yourself a code comment to remind yourself to change it.
+For example, here's the real world code comment that inspired this gem:
 
 ``` ruby
 class UsersController < ApiController
@@ -43,11 +41,10 @@ actual support incident (long story).
 ### The cool new way you put off coding now
 
 So I did what any programmer would do in the face of an intractable social
-problem: I wrote code in the vain hope of solving it without having to talk to
-anyone.
+problem: I wrote code in the vain hope of solving things without needing to talk
+to anyone, and now this gem exists.
 
-To use the gem, try replacing one of your TODO comments with something like
-this:
+To use it, try replacing one of your TODO comments with something like this:
 
 ``` ruby
 class UsersController < ApiController
@@ -79,19 +76,21 @@ TODO: "Visit Wisconsin" came due on 2016-11-9. Do it!
 
 If TodoOrDie sees that `Rails` is defined, it'll assume you probably don't want
 this tool to run outside development and test, so it'll log the error message to
-`Rails.logger.warn` in production and raise the error otherwise.
+`Rails.logger.warn` in production (while still raising the error in development
+and test).
 
-### Wait, won't raising time-based errors throughout my app ruin my weekend?
+### Wait, won't sprinkling time bombs throughout my app ruin my weekend?
 
-Sure will! It's TODO or Die, not TODO and Remember to Pace Yourself.
+Sure will! It's "TODO or Die", not "TODO and Remember to Pace Yourself".
 
-Still, people will probably get mad if you break production because you forgot
-to remove an A/B test, so I'd [strongly recommend you read what the default hook
-actually does](lib/todo_or_die.rb) before you commit any to-do items to your
-codebase.
+Still, someone will probably get mad if you break production because you forgot
+to follow through on removing an A/B test, so I'd [strongly recommend you read
+what the default hook actually does](lib/todo_or_die.rb#L8-L16) before this gem
+leads to you losing your job. (Speaking of, please note the lack of any warranty
+in `todo_or_die`'s [license](LICENSE.txt).)
 
-You can customize the gem's behavior by passing in your own callable
-lambda/proc/thing like this:
+To appease your boss, you may customize the gem's behavior by passing in your
+own `call`'able lambda/proc/dingus like this:
 
 ```ruby
 TodoOrDie.config(
@@ -104,27 +103,28 @@ TodoOrDie.config(
 ```
 
 Now, any `TodoOrDie()` invocations in your codebase (other than Karen's) will be
-ignored. (You can reset this with `TodoOrDie.reset`).
+ignored. (You can restore the default hook with `TodoOrDie.reset`).
 
 ## When is this useful?
 
-Any time you know the code needs to change, but it can't change right now, and
-you lack some other reliable means of ensuring yourself (or your team)
-will actually follow through on making the change later.
+This gem may come in handy whenever you know the code _will_ needs to change,
+but it can't be changed just yet, and you lack some other reliable means of
+ensuring yourself (or your team) will actually follow through on making the
+change later.
 
-However, recall that [LeBlanc's
-Law](https://www.quora.com/What-resources-could-I-read-about-Leblancs-law)
-states that `Later == Never`, countless proofs of which have been demonstrated
-by software teams around the world. Some common examples:
+This is a good time to recall [LeBlanc's
+Law](https://www.quora.com/What-resources-could-I-read-about-Leblancs-law),
+which states that `Later == Never`. Countless proofs of this theorem have been
+reproduced by software teams around the world. Some common examples:
 
 * A feature flag was added to the app, and the old code path is still present,
-  long after all production traffic has been migrated with a useless `TODO:
-  delete` comment to keep it company
-* A failing test is blocking the build and there's an urgent pressure to deploy,
-  and insufficient time to fix the test, so somebody wants to comment the test
-  out "for now"
-* You're a real funny person and you think it'd be hilarious to make a bunch of
-  Jim's tests start failing on Christmas morning
+  long after all production traffic has been migrated. There's now just a
+  useless `TODO: delete` comment to keep it company
+* A failing test was blocking the build and someone felt an urgent pressure to
+  deploy the app in spite of this. So, rather than fix the test, Bill commented
+  it out "for now"
+* You're a real funny guy and you think it'd be hilarious to make a bunch of
+  Aaron's tests start failing on Christmas morning
 
 ## Pro-tip
 
