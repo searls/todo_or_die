@@ -5,9 +5,15 @@ require "todo_or_die/overdue_error"
 module TodoOrDie
   DEFAULT_CONFIG = {
     die: ->(message, due_at) {
-      raise TodoOrDie::OverdueTodo.new <<~MSG
+      error_message = <<~MSG
         TODO: "#{message}" came due on #{due_at.strftime("%Y-%m-%d")}. Do it!
       MSG
+
+      if defined?(Rails) && Rails.env.production?
+        Rails.logger.warn(error_message)
+      else
+        raise TodoOrDie::OverdueTodo.new(error_message)
+      end
     },
   }.freeze
 

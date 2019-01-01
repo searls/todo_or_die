@@ -52,6 +52,28 @@ class TodoOrDieTest < UnitTest
     assert_equal TodoOrDie.config[:die], TodoOrDie::DEFAULT_CONFIG[:die]
   end
 
+  def test_when_rails_is_a_thing_and_not_production
+    make_it_be_rails(false)
+
+    Timecop.travel(Date.civil(1980, 1, 20))
+
+    assert_raises(TodoOrDie::OverdueTodo) {
+      TodoOrDie("I am in Rails", by: Date.civil(1980, 1, 15))
+    }
+  end
+
+  def test_when_rails_is_a_thing_and_is_production
+    faux_logger = make_it_be_rails(true)
+
+    Timecop.travel(Date.civil(1980, 1, 20))
+
+    TodoOrDie("Solve the Iranian hostage crisis", by: Date.civil(1980, 1, 20))
+
+    assert_equal <<~MSG, faux_logger.warning
+      TODO: "Solve the Iranian hostage crisis" came due on 1980-01-20. Do it!
+    MSG
+  end
+
   def test_has_version
     assert TodoOrDie::VERSION
   end
