@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["searls@gmail.com"]
 
   spec.summary       = "Write TO​DOs in code that ensure you actually do them"
-  spec.homepage      = "https://github.com/testdouble/todo_or_die"
+  spec.homepage      = "https://github.com/searls/todo_or_die"
 
   spec.files         = Dir.chdir(File.expand_path("..", __FILE__)) do
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
