@@ -12,7 +12,7 @@ module TodoOrDie
       if defined?(Rails) && Rails.env.production?
         Rails.logger.warn(error_message)
       else
-        raise TodoOrDie::OverdueTodo, error_message, TodoOrDie.clean_backtrace(caller)
+        raise TodoOrDie::OverdueTodo, error_message, TodoOrDie.__clean_backtrace(caller)
       end
     },
   }.freeze
@@ -27,7 +27,7 @@ module TodoOrDie
   end
 
   FILE_PATH_REGEX = Regexp.new(Regexp.quote(__dir__)).freeze
-  def self.clean_backtrace(stack)
+  def self.__clean_backtrace(stack)
     stack.delete_if {|line| line =~ FILE_PATH_REGEX }
   end
 end
