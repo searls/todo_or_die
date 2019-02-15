@@ -74,6 +74,16 @@ class TodoOrDieTest < UnitTest
     MSG
   end
 
+  def test_todo_or_die_file_path_removed_from_backtrace
+    Timecop.travel(Date.civil(2200, 2, 4))
+
+    error = assert_raises(TodoOrDie::OverdueTodo) {
+      TodoOrDie("Fix stuff", by: Date.civil(2200, 2, 4))
+    }
+
+    assert_empty(error.backtrace.select {|line| line.match?(/todo_or_die\.rb/) })
+  end
+
   def test_has_version
     assert TodoOrDie::VERSION
   end
