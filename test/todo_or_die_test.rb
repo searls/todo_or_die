@@ -81,7 +81,7 @@ class TodoOrDieTest < UnitTest
       TodoOrDie("Fix stuff", by: Date.civil(2200, 2, 4))
     }
 
-    assert_empty(error.backtrace.select {|line| line.match?(TodoOrDie::FILE_PATH_REGEX) })
+    assert_empty(error.backtrace.select {|line| line.match?(/todo_or_die\.rb/) })
   end
 
   def test_has_version
