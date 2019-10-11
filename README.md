@@ -60,6 +60,20 @@ end
 Nothing will happen at all until February 4th, at which point the gem will
 raise an error whenever this class is loaded until someone deals with it.
 
+You may also pass a condition:
+
+``` ruby
+class User < ApplicationRecord
+  TodoOrDie(
+    "delete after 1 million users",
+    if: User.size > 1000000,
+  )
+  def is_one_millionth_user?
+    id == 1000000
+  end
+end
+```
+
 ### What kind of error?
 
 It depends on whether you're using [Rails](https://rubyonrails.org) or not.
