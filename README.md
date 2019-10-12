@@ -60,7 +60,7 @@ end
 Nothing will happen at all until February 4th, at which point the gem will
 raise an error whenever this class is loaded until someone deals with it.
 
-You may also pass a condition:
+You may also pass a condition, either as boolean or in proc/lambda form:
 
 ``` ruby
 class User < ApplicationRecord

@@ -92,14 +92,14 @@ class TodoOrDieTest < UnitTest
     Timecop.travel(Date.civil(2200, 2, 4))
 
     assert_raises(TodoOrDie::OverdueTodo) {
-      TodoOrDie("Check your math", by: Date.civil(2200, 2, 4), if: 2 + 2 == 4)
+      TodoOrDie("Check your math", by: Date.civil(2200, 2, 4), if: -> { 2 + 2 == 4 })
     }
   end
 
   def test_not_due_and_if_condition_is_true_does_not_blow_up
     Timecop.travel(Date.civil(2100, 2, 4))
 
-    TodoOrDie("Check your math", by: Date.civil(2200, 2, 4), if: 2 + 2 == 4)
+    TodoOrDie("Check your math", by: Date.civil(2200, 2, 4), if: -> { 2 + 2 == 4 })
 
     # 🦗 sounds
   end
@@ -107,14 +107,14 @@ class TodoOrDieTest < UnitTest
   def test_due_and_if_condition_is_false_does_not_blow_up
     Timecop.travel(Date.civil(2200, 2, 4))
 
-    TodoOrDie("Check your math", by: Date.civil(2200, 2, 4), if: 2 + 2 == 5)
+    TodoOrDie("Check your math", by: Date.civil(2200, 2, 4), if: -> { 2 + 2 == 5 })
 
     # 🦗 sounds
   end
 
   def test_by_not_passed_and_if_condition_is_true_blows_up
     error = assert_raises(TodoOrDie::OverdueTodo) {
-      TodoOrDie("Check your math", if: 2 + 2 == 4)
+      TodoOrDie("Check your math", if: -> { 2 + 2 == 4 })
     }
 
     assert_equal <<~MSG, error.message
@@ -123,8 +123,20 @@ class TodoOrDieTest < UnitTest
   end
 
   def test_by_not_passed_and_if_condition_false_does_not_blow_up
-    TodoOrDie("Check your math", if: 2 + 2 == 5)
+    TodoOrDie("Check your math", if: -> { 2 + 2 == 5 })
 
     # 🦗 sounds
+  end
+
+  def test_by_not_passed_and_if_condition_is_false_boolean_does_not_blow_up
+    TodoOrDie("Check your math", if: false)
+
+    # 🦗 sounds
+  end
+
+  def test_by_not_passed_and_if_condition_is_true_boolean_blows_up
+    assert_raises(TodoOrDie::OverdueTodo) {
+      TodoOrDie("Check your math", if: true)
+    }
   end
 end

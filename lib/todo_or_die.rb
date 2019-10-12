@@ -39,12 +39,13 @@ module TodoOrDie
 end
 
 # The main event
-def TodoOrDie(message, by: nil, if: true) # rubocop:disable Naming/MethodName
+def TodoOrDie(message, by: nil, if: -> { true }) # rubocop:disable Naming/MethodName
   if by
     by_passed = true
   end
 
-  if binding.local_variable_get(:if)
+  condition = binding.local_variable_get(:if)
+  if condition.respond_to?(:call) && condition.call || condition == true
     due_at = by&.to_time || Time.now
 
     if Time.now >= due_at
