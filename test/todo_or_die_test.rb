@@ -37,7 +37,7 @@ class TodoOrDieTest < UnitTest
 
     assert_equal result, "pants"
     assert_equal actual_message, "kaka"
-    assert_same actual_by, some_time
+    assert_equal actual_by, some_time
   end
 
   def test_config_and_reset
@@ -86,5 +86,21 @@ class TodoOrDieTest < UnitTest
 
   def test_has_version
     assert TodoOrDie::VERSION
+  end
+
+  def test_by_string_due_blows_up
+    Timecop.travel(Date.civil(2200, 2, 4))
+
+    assert_raises(TodoOrDie::OverdueTodo) {
+      TodoOrDie("Feelin' stringy", by: "2200-02-04")
+    }
+  end
+
+  def test_by_string_not_due_does_not_blow_up
+    Timecop.travel(Date.civil(2100, 2, 4))
+
+    TodoOrDie("Feelin' stringy", by: "2200-02-04")
+
+    # 🦗 sounds
   end
 end

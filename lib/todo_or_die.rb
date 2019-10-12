@@ -34,7 +34,7 @@ end
 
 # The main event
 def TodoOrDie(message, by:) # rubocop:disable Naming/MethodName
-  due_at = by.to_time
+  due_at = Time.parse(by.to_s)
 
   if Time.now >= due_at
     TodoOrDie.config[:die].call(message, due_at)

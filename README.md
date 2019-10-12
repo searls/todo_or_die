@@ -50,7 +50,7 @@ To use it, try replacing one of your TODO comments with something like this:
 
 ``` ruby
 class UsersController < ApiController
-  TodoOrDie("delete after JS app has propagated", by: Time.parse("2019-02-04"))
+  TodoOrDie("delete after JS app has propagated", by: "2019-02-04")
   def show
     redirect_to root_path
   end
