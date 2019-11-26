@@ -81,7 +81,7 @@ class TodoOrDieTest < UnitTest
       TodoOrDie("Fix stuff", by: Date.civil(2200, 2, 4))
     }
 
-    assert_empty(error.backtrace.select {|line| line.match?(/todo_or_die\.rb/) })
+    assert_empty(error.backtrace.select { |line| line.match?(/todo_or_die\.rb/) })
   end
 
   def test_has_version
@@ -102,5 +102,57 @@ class TodoOrDieTest < UnitTest
     TodoOrDie("Feelin' stringy", by: "2200-02-04")
 
     # 🦗 sounds
+  end
+
+  def test_due_and_if_condition_is_true_blows_up
+    Timecop.travel(Date.civil(2200, 2, 4))
+
+    assert_raises(TodoOrDie::OverdueTodo) {
+      TodoOrDie("Check your math", by: Date.civil(2200, 2, 4), if: -> { 2 + 2 == 4 })
+    }
+  end
+
+  def test_not_due_and_if_condition_is_true_does_not_blow_up
+    Timecop.travel(Date.civil(2100, 2, 4))
+
+    TodoOrDie("Check your math", by: Date.civil(2200, 2, 4), if: -> { 2 + 2 == 4 })
+
+    # 🦗 sounds
+  end
+
+  def test_due_and_if_condition_is_false_does_not_blow_up
+    Timecop.travel(Date.civil(2200, 2, 4))
+
+    TodoOrDie("Check your math", by: Date.civil(2200, 2, 4), if: -> { 2 + 2 == 5 })
+
+    # 🦗 sounds
+  end
+
+  def test_by_not_passed_and_if_condition_is_true_blows_up
+    error = assert_raises(TodoOrDie::OverdueTodo) {
+      TodoOrDie("Check your math", if: -> { 2 + 2 == 4 })
+    }
+
+    assert_equal <<~MSG, error.message
+      TODO: "Check your math" has met the conditions to be acted upon. Do it!
+    MSG
+  end
+
+  def test_by_not_passed_and_if_condition_false_does_not_blow_up
+    TodoOrDie("Check your math", if: -> { 2 + 2 == 5 })
+
+    # 🦗 sounds
+  end
+
+  def test_by_not_passed_and_if_condition_is_false_boolean_does_not_blow_up
+    TodoOrDie("Check your math", if: false)
+
+    # 🦗 sounds
+  end
+
+  def test_by_not_passed_and_if_condition_is_true_boolean_blows_up
+    assert_raises(TodoOrDie::OverdueTodo) {
+      TodoOrDie("Check your math", if: true)
+    }
   end
 end
