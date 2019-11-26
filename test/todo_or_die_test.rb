@@ -16,7 +16,7 @@ class TodoOrDieTest < UnitTest
       TodoOrDie("Fix stuff", by: Date.civil(2200, 2, 4))
     }
 
-    assert_equal <<~MSG, error.message
+    assert_equal <<~MSG.chomp, error.message
       TODO: "Fix stuff" came due on 2200-02-04. Do it!
     MSG
   end
@@ -38,6 +38,36 @@ class TodoOrDieTest < UnitTest
     assert_equal result, "pants"
     assert_equal actual_message, "kaka"
     assert_equal actual_by, some_time
+  end
+
+  def test_config_custom_0_arg_die_callable
+    Timecop.travel(Date.civil(2200, 2, 5))
+    TodoOrDie.config(
+      die: -> {
+        :neat
+      }
+    )
+
+    result = TodoOrDie(nil, by: "2200-02-04")
+
+    assert_equal result, :neat
+  end
+
+  def test_config_custom_1_arg_die_callable
+    Timecop.travel(Date.civil(2200, 2, 5))
+    actual_message = nil
+    TodoOrDie.config(
+      die: ->(message) {
+        actual_message = message
+        :cool
+      }
+    )
+    some_time = Time.parse("2200-02-04")
+
+    result = TodoOrDie("secret", by: some_time)
+
+    assert_equal result, :cool
+    assert_equal actual_message, "secret"
   end
 
   def test_config_and_reset
@@ -69,7 +99,7 @@ class TodoOrDieTest < UnitTest
 
     TodoOrDie("Solve the Iranian hostage crisis", by: Date.civil(1980, 1, 20))
 
-    assert_equal <<~MSG, faux_logger.warning
+    assert_equal <<~MSG.chomp, faux_logger.warning
       TODO: "Solve the Iranian hostage crisis" came due on 1980-01-20. Do it!
     MSG
   end
@@ -104,6 +134,14 @@ class TodoOrDieTest < UnitTest
     # 🦗 sounds
   end
 
+  def test_due_when_no_by_or_if_is_passed
+    Timecop.travel(Date.civil(2200, 2, 4))
+
+    assert_raises(TodoOrDie::OverdueTodo) {
+      TodoOrDie("Check your math")
+    }
+  end
+
   def test_due_and_if_condition_is_true_blows_up
     Timecop.travel(Date.civil(2200, 2, 4))
 
@@ -133,8 +171,28 @@ class TodoOrDieTest < UnitTest
       TodoOrDie("Check your math", if: -> { 2 + 2 == 4 })
     }
 
-    assert_equal <<~MSG, error.message
+    assert_equal <<~MSG.chomp, error.message
       TODO: "Check your math" has met the conditions to be acted upon. Do it!
+    MSG
+  end
+
+  def test_by_and_if_condition_both_true_prints_full_message
+    error = assert_raises(TodoOrDie::OverdueTodo) {
+      TodoOrDie("Stuff", by: "1904-02-03", if: -> { true })
+    }
+
+    assert_equal <<~MSG.chomp, error.message
+      TODO: "Stuff" came due on 1904-02-03 and has met the conditions to be acted upon. Do it!
+    MSG
+  end
+
+  def test_no_condition_passed_prints_short_message
+    error = assert_raises(TodoOrDie::OverdueTodo) {
+      TodoOrDie("Stuff")
+    }
+
+    assert_equal <<~MSG.chomp, error.message
+      TODO: "Stuff". Do it!
     MSG
   end
 
@@ -154,5 +212,17 @@ class TodoOrDieTest < UnitTest
     assert_raises(TodoOrDie::OverdueTodo) {
       TodoOrDie("Check your math", if: true)
     }
+  end
+
+  def test_by_not_passed_and_if_condition_is_truthy_blows_up
+    assert_raises(TodoOrDie::OverdueTodo) {
+      TodoOrDie("Check your math", if: 42)
+    }
+  end
+
+  def test_by_not_passed_and_if_condition_is_falsy_does_not_blow_up
+    TodoOrDie("Check your math", if: nil)
+
+    # 🦗 sounds
   end
 end

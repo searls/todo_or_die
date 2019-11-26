@@ -4,16 +4,14 @@ require "todo_or_die/overdue_error"
 # The namespace
 module TodoOrDie
   DEFAULT_CONFIG = {
-    die: ->(message, due_at = nil) {
-      error_message = if due_at
-        <<~MSG
-          TODO: "#{message}" came due on #{due_at.strftime("%Y-%m-%d")}. Do it!
-        MSG
-      else
-        <<~MSG
-          TODO: "#{message}" has met the conditions to be acted upon. Do it!
-        MSG
-      end
+    die: ->(message, due_at, condition) {
+      error_message = [
+        "TODO: \"#{message}\"",
+        (" came due on #{due_at.strftime("%Y-%m-%d")}" if due_at),
+        (" and" if due_at && condition),
+        (" has met the conditions to be acted upon" if condition),
+        ". Do it!",
+      ].compact.join("")
 
       if defined?(Rails) && Rails.env.production?
         Rails.logger.warn(error_message)
@@ -39,21 +37,14 @@ module TodoOrDie
 end
 
 # The main event
-def TodoOrDie(message, by: nil, if: -> { true }) # rubocop:disable Naming/MethodName
-  if by
-    by_passed = true
-  end
+def TodoOrDie(message, by: by_omitted = true, if: if_omitted = true) # rubocop:disable Naming/MethodName
+  due_at = Time.parse(by.to_s) unless by_omitted
+  is_due = by_omitted || Time.now > due_at
+  condition = binding.local_variable_get(:if) unless if_omitted
+  condition_met = if_omitted || (condition.respond_to?(:call) ? condition.call : condition)
 
-  condition = binding.local_variable_get(:if)
-  if condition.respond_to?(:call) && condition.call || condition == true
-    due_at = by_passed ? Time.parse(by.to_s) : Time.now
-
-    if Time.now >= due_at
-      if by_passed
-        TodoOrDie.config[:die].call(message, due_at)
-      else
-        TodoOrDie.config[:die].call(message)
-      end
-    end
+  if is_due && condition_met
+    die = TodoOrDie.config[:die]
+    die.call(*[message, due_at, condition].take(die.arity.abs))
   end
 end
