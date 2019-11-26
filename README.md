@@ -60,19 +60,21 @@ end
 Nothing will happen at all until February 4th, at which point the gem will
 raise an error whenever this class is loaded until someone deals with it.
 
-You may also pass a condition, either as boolean or in proc/lambda form:
+You may also pass a condition, either as a callable (e.g. proc/lambda/method) or
+a boolean test:
 
 ``` ruby
 class User < ApplicationRecord
-  TodoOrDie(
-    "delete after 1 million users",
-    if: User.size > 1000000,
-  )
+  TodoOrDie("delete after someone wins", if: User.count > 1000000)
   def is_one_millionth_user?
     id == 1000000
   end
 end
 ```
+
+You can also pass both `by` and `if` (where both must be met for an error to be
+raised) or, I guess, neither (where an error will be raised as soon as
+`TodoOrDie` is invoked).
 
 ### What kind of error?
 
