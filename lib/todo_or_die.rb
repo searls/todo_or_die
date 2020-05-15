@@ -1,5 +1,6 @@
 require "todo_or_die/version"
 require "todo_or_die/overdue_error"
+require "time" unless Time.respond_to? :parse
 
 # The namespace
 module TodoOrDie
