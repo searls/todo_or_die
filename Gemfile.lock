@@ -7,27 +7,30 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.0)
-    jaro_winkler (1.5.1)
+    jaro_winkler (1.5.4)
     minitest (5.11.3)
-    parallel (1.12.1)
-    parser (2.5.3.0)
+    parallel (1.19.1)
+    parser (2.7.1.2)
       ast (~> 2.4.0)
-    powerpack (0.1.2)
     rainbow (3.0.0)
     rake (13.0.1)
-    rubocop (0.61.1)
+    rexml (3.2.4)
+    rubocop (0.82.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
-      parser (>= 2.5, != 2.5.1.1)
-      powerpack (~> 0.1)
+      parser (>= 2.7.0.1)
       rainbow (>= 2.2.2, < 4.0)
+      rexml
       ruby-progressbar (~> 1.7)
-      unicode-display_width (~> 1.4.0)
-    ruby-progressbar (1.10.0)
-    standard (0.0.23)
-      rubocop (>= 0.60)
+      unicode-display_width (>= 1.4.0, < 2.0)
+    rubocop-performance (1.5.2)
+      rubocop (>= 0.71.0)
+    ruby-progressbar (1.10.1)
+    standard (0.4.1)
+      rubocop (~> 0.82.0)
+      rubocop-performance (~> 1.5.2)
     timecop (0.9.1)
-    unicode-display_width (1.4.1)
+    unicode-display_width (1.7.0)
 
 PLATFORMS
   ruby
@@ -41,4 +44,4 @@ DEPENDENCIES
   todo_or_die!
 
 BUNDLED WITH
-   1.17.3
+   2.1.4

@@ -11,7 +11,7 @@ module TodoOrDie
         (" came due on #{due_at.strftime("%Y-%m-%d")}" if due_at),
         (" and" if due_at && condition),
         (" has met the conditions to be acted upon" if condition),
-        ". Do it!",
+        ". Do it!"
       ].compact.join("")
 
       if defined?(Rails) && Rails.env.production?
@@ -19,7 +19,7 @@ module TodoOrDie
       else
         raise TodoOrDie::OverdueTodo, error_message, TodoOrDie.__clean_backtrace(caller)
       end
-    },
+    }
   }.freeze
 
   def self.config(options = {})
