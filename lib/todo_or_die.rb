@@ -19,6 +19,20 @@ module TodoOrDie
       else
         raise TodoOrDie::OverdueTodo, error_message, TodoOrDie.__clean_backtrace(caller)
       end
+    },
+
+    warn: lambda { |message, due_at, warn_at, condition|
+      error_message = [
+        "TODO: \"#{message}\"",
+        (" is due on #{due_at.strftime("%Y-%m-%d")}" if due_at),
+        (" and" if warn_at && condition),
+        (" has met the conditions to be acted upon" if condition),
+        ". Don't forget!"
+      ].compact.join("")
+
+      puts error_message
+
+      Rails.logger.warn(error_message) if defined?(Rails)
     }
   }.freeze
 
@@ -38,14 +52,21 @@ module TodoOrDie
 end
 
 # The main event
-def TodoOrDie(message, by: by_omitted = true, if: if_omitted = true) # rubocop:disable Naming/MethodName
+def TodoOrDie(message, by: by_omitted = true, if: if_omitted = true, warn_by: warn_by_omitted = true) # rubocop:disable Naming/MethodName
   due_at = Time.parse(by.to_s) unless by_omitted
-  is_due = by_omitted || Time.now > due_at
+  warn_at = Time.parse(warn_by.to_s) unless warn_by_omitted
   condition = binding.local_variable_get(:if) unless if_omitted
-  condition_met = if_omitted || (condition.respond_to?(:call) ? condition.call : condition)
 
-  if is_due && condition_met
+  should_warn = !warn_by_omitted && Time.now > warn_at
+  is_due = by_omitted || Time.now > due_at
+  die_condition_met = if_omitted || (condition.respond_to?(:call) ? condition.call : condition)
+  should_die = is_due && die_condition_met
+
+  if should_die
     die = TodoOrDie.config[:die]
     die.call(*[message, due_at, condition].take(die.arity.abs))
+  elsif should_warn
+    warn = TodoOrDie.config[:warn]
+    warn.call(*[message, due_at, warn_at, condition].take(warn.arity.abs))
   end
 end

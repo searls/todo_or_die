@@ -21,6 +21,48 @@ class TodoOrDieTest < UnitTest
     MSG
   end
 
+  def test_warn_todo_warns
+    Timecop.travel(Date.civil(2200, 2, 4))
+
+    out, _err = capture_io {
+      TodoOrDie("Fix stuff", by: Date.civil(2200, 2, 5), warn_by: Date.civil(2200, 2, 4))
+    }
+
+    assert_equal <<~MSG.chomp, out.strip
+      TODO: "Fix stuff" is due on 2200-02-05. Don't forget!
+    MSG
+  end
+
+  def test_doesnt_warn_early
+    Timecop.travel(Date.civil(2200, 2, 3))
+
+    out, _err = capture_io {
+      TodoOrDie("Fix stuff", by: Date.civil(2200, 2, 5), warn_by: Date.civil(2200, 2, 4))
+    }
+
+    assert_equal "", out.strip
+  end
+
+  def test_config_warn
+    Timecop.travel(Date.civil(2200, 2, 5))
+    actual_message, actual_by = nil
+    TodoOrDie.config(
+      warn: ->(message, by) {
+        actual_message = message
+        actual_by = by
+        "pants"
+      }
+    )
+    some_time = Time.parse("2200-02-06")
+    some_earlier_time = Time.parse("2200-02-03")
+
+    result = TodoOrDie("kaka", by: some_time, warn_by: some_earlier_time)
+
+    assert_equal result, "pants"
+    assert_equal actual_message, "kaka"
+    assert_equal actual_by, some_time
+  end
+
   def test_config_custom_explosion
     Timecop.travel(Date.civil(2200, 2, 5))
     actual_message, actual_by = nil
@@ -101,6 +143,18 @@ class TodoOrDieTest < UnitTest
 
     assert_equal <<~MSG.chomp, faux_logger.warning
       TODO: "Solve the Iranian hostage crisis" came due on 1980-01-20. Do it!
+    MSG
+  end
+
+  def test_warn_when_rails_is_a_thing
+    faux_logger = make_it_be_rails(true)
+
+    Timecop.travel(Date.civil(2200, 2, 4))
+
+    TodoOrDie("Fix stuff", by: Date.civil(2200, 2, 5), warn_by: Date.civil(2200, 2, 4))
+
+    assert_equal <<~MSG.chomp, faux_logger.warning
+      TODO: "Fix stuff" is due on 2200-02-05. Don't forget!
     MSG
   end
 
