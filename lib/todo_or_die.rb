@@ -52,7 +52,7 @@ module TodoOrDie
 end
 
 # The main event
-def TodoOrDie(message, by: by_omitted = true, if: if_omitted = true, warn_by: warn_by_omitted = true) # rubocop:disable Naming/MethodName
+def TodoOrDie(message, by: by_omitted = true, if: if_omitted = true, warn_by: warn_by_omitted = true)
   due_at = Time.parse(by.to_s) unless by_omitted
   warn_at = Time.parse(warn_by.to_s) unless warn_by_omitted
   condition = binding.local_variable_get(:if) unless if_omitted

@@ -12,7 +12,7 @@ class UnitTest < Minitest::Test
   end
 
   def make_it_be_rails(is_production)
-    rails = Object.const_set("Rails", Module.new)
+    rails = Object.const_set(:Rails, Module.new)
 
     rails.define_singleton_method(:env) do
       OpenStruct.new(production?: is_production)
