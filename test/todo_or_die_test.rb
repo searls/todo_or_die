@@ -21,7 +21,19 @@ class TodoOrDieTest < UnitTest
     MSG
   end
 
-  def test_warn_todo_warns
+  def test_warns_when_by_not_passed
+    Timecop.travel(Date.civil(2200, 2, 4))
+
+    out, _err = capture_io {
+      TodoOrDie("Fix stuff", warn_by: Date.civil(2200, 2, 4))
+    }
+
+    assert_equal <<~MSG.chomp, out.strip
+      TODO: "Fix stuff". Don't forget!
+    MSG
+  end
+
+  def test_warns_with_by
     Timecop.travel(Date.civil(2200, 2, 4))
 
     out, _err = capture_io {

@@ -57,10 +57,14 @@ def TodoOrDie(message, by: by_omitted = true, if: if_omitted = true, warn_by: wa
   warn_at = Time.parse(warn_by.to_s) unless warn_by_omitted
   condition = binding.local_variable_get(:if) unless if_omitted
 
-  should_warn = !warn_by_omitted && Time.now > warn_at
-  is_due = by_omitted || Time.now > due_at
+  is_past_due_date = by_omitted || Time.now > due_at
   die_condition_met = if_omitted || (condition.respond_to?(:call) ? condition.call : condition)
-  should_die = is_due && die_condition_met
+  no_conditions_given = by_omitted && if_omitted && warn_by_omitted
+  only_warn_condition_given = (if_omitted && by_omitted && !warn_by_omitted)
+
+  ready_to_die = is_past_due_date && die_condition_met && !only_warn_condition_given
+  should_die = no_conditions_given || ready_to_die
+  should_warn = !warn_by_omitted && Time.now > warn_at
 
   if should_die
     die = TodoOrDie.config[:die]
