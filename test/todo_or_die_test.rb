@@ -1,5 +1,3 @@
-require "test_helper"
-
 class TodoOrDieTest < UnitTest
   def test_not_due_todo_does_nothing
     Timecop.travel(Date.civil(2200, 2, 3))

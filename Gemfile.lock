@@ -7,15 +7,20 @@ GEM
   remote: https://rubygems.org/
   specs:
     ast (2.4.2)
+    attr_extras (7.1.0)
     base64 (0.1.1)
+    concurrent-ruby (1.2.2)
+    diff-lcs (1.5.0)
     json (2.6.3)
     language_server-protocol (3.17.0.3)
     lint_roller (1.1.0)
-    minitest (5.20.0)
+    optimist (3.1.0)
     parallel (1.23.0)
     parser (3.2.2.3)
       ast (~> 2.4.1)
       racc
+    patience_diff (1.2.0)
+      optimist (~> 3.0)
     racc (1.7.1)
     rainbow (3.1.1)
     rake (13.0.6)
@@ -51,18 +56,24 @@ GEM
     standard-performance (1.2.0)
       lint_roller (~> 1.1)
       rubocop-performance (~> 1.19.0)
+    super_diff (0.10.0)
+      attr_extras (>= 6.2.4)
+      diff-lcs
+      patience_diff
     timecop (0.9.8)
+    tldr (0.2.0)
+      concurrent-ruby (~> 1.2)
+      super_diff (~> 0.10)
     unicode-display_width (2.4.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  bundler
-  minitest
   rake
   standard
   timecop
+  tldr
   todo_or_die!
 
 BUNDLED WITH

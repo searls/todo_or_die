@@ -1,8 +1,18 @@
 require "ostruct"
-require "minitest/autorun"
 require "timecop"
+Timecop.thread_safe = true
 
 require "todo_or_die"
+
+require "tldr"
+if defined?(Minitest::Test)
+  TLDR::MinitestTestBackup = Minitest::Test
+  Minitest.send(:remove_const, "Test")
+end
+module Minitest
+  class Test < TLDR
+  end
+end
 
 class UnitTest < Minitest::Test
   def teardown
