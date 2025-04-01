@@ -11,6 +11,7 @@ if defined?(Minitest::Test)
 end
 module Minitest
   class Test < TLDR
+    include TLDR::MinitestCompatibility
   end
 end
 
