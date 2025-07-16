@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|MultiEdit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bundle exec tldr --timeout 0.1 --exit-0-on-timeout --exit-2-on-failure"
+          }
+        ]
+      }
+    ]
+  }
+}
