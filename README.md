@@ -2,6 +2,10 @@
 
 <img src="https://user-images.githubusercontent.com/79303/50570550-f41a6180-0d5d-11e9-8033-7ea4dfb7261c.jpg" height="360"  alt="TODO or Die NES cart"/>
 
+## Ports
+
+* Swift: [searls/swift-todo_or_die](https://github.com/searls/swift-todo_or_die)
+
 ## Usage
 
 Stick this in your Gemfile and bundle it:
