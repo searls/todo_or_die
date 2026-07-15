@@ -5,6 +5,8 @@
 ## Ports
 
 * Swift: [searls/swift-todo_or_die](https://github.com/searls/swift-todo_or_die)
+* JavaScript: [danieldiekmeier/todo-or-die](https://github.com/danieldiekmeier/todo-or-die)
+* Rust: [davidpdrsn/todo-or-die](https://github.com/davidpdrsn/todo-or-die)
 
 ## Usage
 
