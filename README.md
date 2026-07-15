@@ -7,6 +7,8 @@
 * Swift: [searls/swift-todo_or_die](https://github.com/searls/swift-todo_or_die)
 * JavaScript: [danieldiekmeier/todo-or-die](https://github.com/danieldiekmeier/todo-or-die)
 * Rust: [davidpdrsn/todo-or-die](https://github.com/davidpdrsn/todo-or-die)
+* PHP: [robertology/todo_or_die](https://github.com/robertology/todo_or_die)
+* Kotlin: [serpro69/todo-or-die](https://github.com/serpro69/todo-or-die)
 
 ## Usage
 
