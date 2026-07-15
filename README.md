@@ -9,6 +9,8 @@
 * Rust: [davidpdrsn/todo-or-die](https://github.com/davidpdrsn/todo-or-die)
 * PHP: [robertology/todo_or_die](https://github.com/robertology/todo_or_die)
 * Kotlin: [serpro69/todo-or-die](https://github.com/serpro69/todo-or-die)
+* Python: [achedeuzot/py-todo-or-die](https://github.com/achedeuzot/py-todo-or-die), [walshyb/todo-or-die-python](https://github.com/walshyb/todo-or-die-python)
+* Elixir: [dsdshcym/todo_or_die_elixir](https://github.com/dsdshcym/todo_or_die_elixir)
 
 ## Usage
 
